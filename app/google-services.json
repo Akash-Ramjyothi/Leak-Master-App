@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "317745662932",
+    "firebase_url": "https://gas-detection-v1-752ab-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "gas-detection-v1-752ab",
+    "storage_bucket": "gas-detection-v1-752ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317745662932:android:a36e72617860cb4cb5e441",
+        "android_client_info": {
+          "package_name": "com.akash.leakmasterv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxlJw4VMEilwxQc9kC6AoiaAZydwDaf94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
