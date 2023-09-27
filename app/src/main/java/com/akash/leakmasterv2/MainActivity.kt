@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
+import android.widget.TextView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -51,6 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     // Function to fetch data
     private fun fetchGasSensorData(){
+        val mq2valueTextView = findViewById(R.id.mq2value_text) as TextView // Referencing TextView in MainActivity
+
         dbRef = FirebaseDatabase.getInstance().getReference("GasSensorValues") // Referencing data inside path GasSensorValues
 
         dbRef.addValueEventListener(object : ValueEventListener{
@@ -66,7 +69,11 @@ class MainActivity : AppCompatActivity() {
                     for (i in requiredChild.children){
                         Log.d(TAG,"Iterating i: ${i}")
                         Log.d(TAG,"Finding MQ-2 Value: ${i.value}")
-                        Log.d(TAG,"Correct MQ-2 Value: ${i.value}")
+
+                        val gasSensorValue = i.getValue(GasSensorValuesModel::class.java) // Variable to get actual mq2Value data
+                        Log.d(TAG,"Correct MQ-2 Value: ${gasSensorValue?.mq2Value}") // Final correct result
+
+                        mq2valueTextView.setText("MQ-2 Sensor value: ${gasSensorValue?.mq2Value}")
                     }
 
 //                    for (leakValues in  snapshot.children){
