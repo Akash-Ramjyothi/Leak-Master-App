@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/gasStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gas is Turned OFF"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="70sp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/gasOffAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="400sp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://lottie.host/3324c7b3-f05d-4252-9161-78150f2bf7b3/DHNtQUkLF9.json" />
 
     <TextView
         android:id="@+id/mq2value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MQ-2 Sensor value: 0"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Gas Sensor value: 0 ppm"
+        android:textSize="26dp"
+        android:layout_marginTop="70sp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

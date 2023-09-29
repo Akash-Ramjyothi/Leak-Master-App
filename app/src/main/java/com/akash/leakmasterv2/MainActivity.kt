@@ -1,10 +1,15 @@
 package com.akash.leakmasterv2
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -62,6 +67,15 @@ class MainActivity : AppCompatActivity() {
         val mq2valueTextView =
             findViewById(R.id.mq2value_text) as TextView // Referencing TextView in MainActivity
 
+        val parentLayout =
+            findViewById<LinearLayout>(R.id.parentLayout) // Referencing parent Linear layout
+
+        val gasStatusTextView = findViewById<TextView>(R.id.gasStatus) // Referencing Gas Status textview
+
+        // Change color of Status Bar
+        val window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) // Referencing StatusBar
+
         SMS_SENT_INDICATOR = false // Marking SMS sent as false
 
         dbRef = FirebaseDatabase.getInstance()
@@ -96,30 +110,62 @@ class MainActivity : AppCompatActivity() {
                             TAG, "Correct MQ-2 Value: ${mq2SensorValueNumber}"
                         ) // Final correct result
 
-                        mq2valueTextView.setText("MQ-2 Sensor value: ${mq2SensorValueNumber}") // Displaying MQ-2 sensor value in TextView
+                        mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumber} ppm") // Displaying MQ-2 sensor value in TextView
 
-                        // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
-                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE && SMS_SENT_INDICATOR==false) {
+                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() == 0) { // When DB value is 0
 
-                            Toast.makeText(
-                                applicationContext, "ALERT!!! Gas Leak Detected", Toast.LENGTH_SHORT
-                            ).show() // Toast message
+                            window.statusBarColor = Color.BLACK // Changing StatusBar color to BLACK
+                            parentLayout.setBackgroundColor(Color.WHITE) // Setting background of layout to WHITE
 
-                            // Call SMS API to send Alert SMS
-                            sendSMS("+91 89399 28002", object : Callback {
-                                override fun onFailure(call: Call, e: IOException) {
-                                    // Handle network error
-                                    e.printStackTrace()
-                                }
+                            gasStatusTextView.setText("Gas is Turned OFF") // When DB value is 0
+                            gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
+                            mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
 
-                                override fun onResponse(call: Call, response: Response) {
-                                    val responseData = response.body?.string()
-                                    // Handle the response data here
-                                    System.out.println("SMS Response: " + responseData)
-                                }
-                            })
 
-                            SMS_SENT_INDICATOR=true
+                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() < THRESHOLD_VALUE) { // When DB value is below Threshold
+
+                            window.statusBarColor = Color.GREEN // Changing StatusBar color to GREEN
+                            parentLayout.setBackgroundColor(Color.GREEN) // Setting background of layout to GREEN
+
+                            gasStatusTextView.setText("No Gas leak Detected") // When DB value is less than Threshold
+                            gasStatusTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
+                            mq2valueTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
+
+
+                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
+
+                            window.statusBarColor = Color.parseColor("#ffe900") // Changing StatusBar color to RED
+                            parentLayout.setBackgroundColor(Color.parseColor("#ffe900")) // Setting background of layout to RED
+
+                            gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
+                            gasStatusTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
+                            mq2valueTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
+
+                            if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
+
+                                Toast.makeText(
+                                    applicationContext,
+                                    "ALERT!!! Gas Leak Detected",
+                                    Toast.LENGTH_SHORT
+                                ).show() // Toast message
+
+                                // Call SMS API to send Alert SMS
+//                                sendSMS("+91 89399 28002", object : Callback {
+//                                    override fun onFailure(call: Call, e: IOException) {
+//                                        // Handle network error
+//                                        e.printStackTrace()
+//                                    }
+//
+//                                    override fun onResponse(call: Call, response: Response) {
+//                                        val responseData = response.body?.string()
+//                                        // Handle the response data here
+//                                        System.out.println("SMS Response: " + responseData)
+//                                    }
+//                                })
+
+                                SMS_SENT_INDICATOR = true // Marking SMS sent as true
+                            }
+
                         }
                     }
                 }
