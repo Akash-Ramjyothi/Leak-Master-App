@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
         val smsApiUrl = "https://sms-api-71h0.onrender.com/api/${phoneNumber}"
 
-        val client = OkHttpClient()
+        val client = OkHttpClient() // Create object to use OkHttp
 
         // Performing POST Request
         val request = Request.Builder().url(smsApiUrl)
