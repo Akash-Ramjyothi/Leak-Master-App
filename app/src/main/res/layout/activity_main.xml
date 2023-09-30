@@ -19,12 +19,12 @@
         android:layout_marginBottom="70sp"/>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/gasOffAnimation"
+        android:id="@+id/lottieAnimationView"
         android:layout_width="match_parent"
         android:layout_height="400sp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_url="https://lottie.host/3324c7b3-f05d-4252-9161-78150f2bf7b3/DHNtQUkLF9.json" />
+        app:lottie_url="https://lottie.host/3324c7b3-f05d-4252-9161-78150f2bf7b3/DHNtQUkLF9.json"/>
 
     <TextView
         android:id="@+id/mq2value_text"
