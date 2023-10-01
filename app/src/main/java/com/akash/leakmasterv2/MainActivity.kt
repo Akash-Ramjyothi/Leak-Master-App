@@ -1,17 +1,16 @@
 package com.akash.leakmasterv2
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,7 +18,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import okhttp3.*
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private val THRESHOLD_VALUE = 5 // Threshold value to send Alarm
     private var SMS_SENT_INDICATOR =
         false // To indentify if the SMS is sent in a single event or not
-    //private var ANIMATION_COMPLETION_STATUS = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val firebase: DatabaseReference =
@@ -74,9 +71,11 @@ class MainActivity : AppCompatActivity() {
         val parentLayout =
             findViewById<LinearLayout>(R.id.parentLayout) // Referencing parent Linear layout
 
-        val gasStatusTextView = findViewById<TextView>(R.id.gasStatus) // Referencing Gas Status textview
+        val gasStatusTextView =
+            findViewById<TextView>(R.id.gasStatus) // Referencing Gas Status textview
 
-        val lottieFileViewLottie = findViewById<LottieAnimationView>(R.id.lottieAnimationView)
+        val lottieFileViewLottie =
+            findViewById<LottieAnimationView>(R.id.lottieAnimationView) // Referencing Lottie Animation View widget
 
         // Change color of Status Bar
         val window = window
@@ -118,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
                         mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumber} ppm") // Displaying MQ-2 sensor value in TextView
 
-                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() == 0) { // When DB value is 0
+                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() <= 0) { // When DB value is 0
 
                             window.statusBarColor = Color.BLACK // Changing StatusBar color to BLACK
                             parentLayout.setBackgroundColor(Color.WHITE) // Setting background of layout to WHITE
@@ -127,43 +126,41 @@ class MainActivity : AppCompatActivity() {
                             gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
                             mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
 
-                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3324c7b3-f05d-4252-9161-78150f2bf7b3/DHNtQUkLF9.json") // Gas OFF URL
+                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/a144eb42-7410-41ec-a912-18e7fddd2088/84OwkSBfoV.json") // Gas OFF URL
                             lottieFileViewLottie.playAnimation() // Enable Animation
-
+                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
 
                         } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() < THRESHOLD_VALUE) { // When DB value is below Threshold
 
-                            window.statusBarColor = Color.parseColor("#8AFF8A") // Changing StatusBar color to GREEN
+                            window.statusBarColor =
+                                Color.parseColor("#8AFF8A") // Changing StatusBar color to GREEN
                             parentLayout.setBackgroundColor(Color.parseColor("#8AFF8A")) // Setting background of layout to GREEN
 
                             gasStatusTextView.setText("No Gas leak Detected") // When DB value is less than Threshold
                             gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
                             mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
 
-                            lottieFileViewLottie.setAnimationFromUrl("https://bafkreih4cmup5ldmept3jr7yqf2yofqhkzo3233octj4hthtxxr2tht5rq.ipfs.nftstorage.link/") // No Gas Leaking URL
+                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/59563e3d-b43d-4587-832b-4335dd1d53c1/Rq9pSPSDgc.json") // No Gas Leaking URL
+                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/0ab8fdc9-b232-474f-8f41-60b9f81261bb/h3JeeqXmui.json") // No Gas Leaking URL
                             lottieFileViewLottie.playAnimation() // Enable Animation
+                            lottieFileViewLottie.setSpeed(2.6f) // Set Animation Speed
 
 
                         } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
 
-                            window.statusBarColor = Color.parseColor("#ffca30") // Changing StatusBar color to RED
-                            parentLayout.setBackgroundColor(Color.parseColor("#ffca30")) // Setting background of layout to RED
+
+                            window.statusBarColor =
+                                Color.parseColor("#F4E869") // Changing StatusBar color to RED
+                            parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
 
                             gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
-                            gasStatusTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
-                            mq2valueTextView.setTextColor(Color.parseColor("#ffffff")) // Changing TextView color to white
+                            gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to white
+                            mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to white
 
-                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
+                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
+                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3ba3d2c8-07fa-4b77-a493-236647192351/RdVih9L78P.json") // Gas Leaking URL
                             lottieFileViewLottie.playAnimation() // Enable Animation
-
-                            // Add an animation listener to perform actions when the animation ends
-                            lottieFileViewLottie.addAnimatorListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator) {
-                                    // Animation has ended, you can perform actions here
-                                    // For example, show a toast message or start another activity
-                                    // Do nothing for now as per your request
-                                }
-                            })
+                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
 
                             if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
 
@@ -186,6 +183,10 @@ class MainActivity : AppCompatActivity() {
 //                                        System.out.println("SMS Response: " + responseData)
 //                                    }
 //                                })
+
+                                val vibratorService =
+                                    getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                vibratorService.vibrate(1500)
 
                                 SMS_SENT_INDICATOR = true // Marking SMS sent as true
                             }

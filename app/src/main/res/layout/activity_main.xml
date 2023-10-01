@@ -24,7 +24,7 @@
         android:layout_height="400sp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_url="https://lottie.host/3324c7b3-f05d-4252-9161-78150f2bf7b3/DHNtQUkLF9.json"/>
+        app:lottie_url="https://lottie.host/e114bd70-802f-4676-bb42-2557a5e73744/iz6MMBstgC.json"/>
 
     <TextView
         android:id="@+id/mq2value_text"
@@ -33,6 +33,5 @@
         android:text="Gas Sensor value: 0 ppm"
         android:textSize="26dp"
         android:layout_marginTop="70sp"/>
-
 
 </LinearLayout>
