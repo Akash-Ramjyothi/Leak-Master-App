@@ -24,7 +24,7 @@
         android:layout_height="400sp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_url="https://lottie.host/e114bd70-802f-4676-bb42-2557a5e73744/iz6MMBstgC.json"/>
+        app:lottie_url="https://lottie.host/a144eb42-7410-41ec-a912-18e7fddd2088/84OwkSBfoV.json"/>
 
     <TextView
         android:id="@+id/mq2value_text"

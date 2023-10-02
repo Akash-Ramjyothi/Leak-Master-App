@@ -2,8 +2,10 @@ package com.akash.leakmasterv2
 
 import android.content.Context
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Vibrator
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.yagmurerdogan.toasticlib.Toastic
 import okhttp3.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val THRESHOLD_VALUE = 5 // Threshold value to send Alarm
     private var SMS_SENT_INDICATOR =
         false // To indentify if the SMS is sent in a single event or not
+    private lateinit var mediaPlayer: MediaPlayer // Creating object for MediaPlayer to play MP3 sound
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val firebase: DatabaseReference =
@@ -145,17 +149,15 @@ class MainActivity : AppCompatActivity() {
                             lottieFileViewLottie.playAnimation() // Enable Animation
                             lottieFileViewLottie.setSpeed(2.6f) // Set Animation Speed
 
-
                         } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
-
 
                             window.statusBarColor =
                                 Color.parseColor("#F4E869") // Changing StatusBar color to RED
                             parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
 
                             gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
-                            gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to white
-                            mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to white
+                            gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
+                            mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
 
                             // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
                             lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3ba3d2c8-07fa-4b77-a493-236647192351/RdVih9L78P.json") // Gas Leaking URL
@@ -164,11 +166,15 @@ class MainActivity : AppCompatActivity() {
 
                             if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
 
-//                                Toast.makeText(
-//                                    applicationContext,
-//                                    "ALERT!!! Gas Leak Detected",
-//                                    Toast.LENGTH_SHORT
-//                                ).show() // Toast message
+                                Toastic.toastic(
+                                    context = this@MainActivity,
+                                    message = "WARNING! Gas Leak Detected",
+                                    duration = Toastic.LENGTH_LONG,
+                                    type = Toastic.ERROR,
+                                    customIcon = R.mipmap.lpg_icon,
+                                    textColor = Color.RED,
+                                    isIconAnimated = true
+                                ).show() // Custom Toast message
 
                                 // Call SMS API to send Alert SMS
 //                                sendSMS("+91 89399 28002", object : Callback {
@@ -184,13 +190,21 @@ class MainActivity : AppCompatActivity() {
 //                                    }
 //                                })
 
-                                val vibratorService =
-                                    getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibratorService.vibrate(1500)
-
                                 SMS_SENT_INDICATOR = true // Marking SMS sent as true
                             }
 
+                            // To make mobile Vibrate
+                            val vibratorService =
+                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                            vibratorService.vibrate(1000)
+
+//                            // To play Sound Effect
+//                           mediaPlayer = MediaPlayer.create(this@MainActivity, R.raw.gas_leak_detected)
+//                            if (mediaPlayer.isPlaying){ // Pause player if sound is already playing
+//                                mediaPlayer.pause()
+//                                mediaPlayer.seekTo(0)
+//                            }
+//                            mediaPlayer.start() // Start sound effect
                         }
                     }
                 }

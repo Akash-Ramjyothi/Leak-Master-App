@@ -57,4 +57,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1") // OkHttp dependency
     implementation("com.airbnb.android:lottie:6.1.0") // Lottie Files dependency
     implementation("com.github.AtifSayings:Animatoo:1.0.1") // Animatoo library
+    implementation("com.github.yagmurerdogan:Toastic:1.0.1") // Custom Toast library
 }
