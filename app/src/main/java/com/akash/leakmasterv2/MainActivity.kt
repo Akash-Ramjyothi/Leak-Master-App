@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
         dbRef.addValueEventListener(object : ValueEventListener { // Firebase read function
             override fun onDataChange(snapshot: DataSnapshot) {
 
+                var mq2SensorValueNumberGlobal: Number = -1;
+
                 gasSensorValuesList.clear()
 
                 if (snapshot.exists()) {
@@ -119,64 +121,157 @@ class MainActivity : AppCompatActivity() {
                             TAG, "Correct MQ-2 Value: ${mq2SensorValueNumber}"
                         ) // Final correct result
 
-                        mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumber} ppm") // Displaying MQ-2 sensor value in TextView
+                        mq2SensorValueNumberGlobal =
+                            mq2SensorValueNumber as Number // Finding correct mq2SensorValue and assigning it to a Global variable
 
-                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() <= 0) { // When DB value is 0
+//                        mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumber} ppm") // Displaying MQ-2 sensor value in TextView
+//
+//                        if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() <= 0) { // When DB value is 0
+//
+//                            window.statusBarColor = Color.BLACK // Changing StatusBar color to BLACK
+//                            parentLayout.setBackgroundColor(Color.WHITE) // Setting background of layout to WHITE
+//
+//                            gasStatusTextView.setText("Gas is Turned OFF") // When DB value is 0
+//                            gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
+//                            mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
+//
+//                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/a144eb42-7410-41ec-a912-18e7fddd2088/84OwkSBfoV.json") // Gas OFF URL
+//                            lottieFileViewLottie.playAnimation() // Enable Animation
+//                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
+//
+//                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() < THRESHOLD_VALUE) { // When DB value is below Threshold
+//
+//                            window.statusBarColor =
+//                                Color.parseColor("#8AFF8A") // Changing StatusBar color to GREEN
+//                            parentLayout.setBackgroundColor(Color.parseColor("#8AFF8A")) // Setting background of layout to GREEN
+//
+//                            gasStatusTextView.setText("No Gas leak Detected") // When DB value is less than Threshold
+//                            gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
+//                            mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
+//
+//                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/59563e3d-b43d-4587-832b-4335dd1d53c1/Rq9pSPSDgc.json") // No Gas Leaking URL
+//                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/0ab8fdc9-b232-474f-8f41-60b9f81261bb/h3JeeqXmui.json") // No Gas Leaking URL
+//                            lottieFileViewLottie.playAnimation() // Enable Animation
+//                            lottieFileViewLottie.setSpeed(2.6f) // Set Animation Speed
+//
+//                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
+//
+//                            window.statusBarColor =
+//                                Color.parseColor("#F4E869") // Changing StatusBar color to RED
+//                            parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
+//
+//                            gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
+//                            gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
+//                            mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
+//
+//                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
+//                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3ba3d2c8-07fa-4b77-a493-236647192351/RdVih9L78P.json") // Gas Leaking URL
+//                            lottieFileViewLottie.playAnimation() // Enable Animation
+//                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
+//
+//                            if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
+//
+//                                Toastic.toastic(
+//                                    context = this@MainActivity,
+//                                    message = "WARNING! Gas Leak Detected",
+//                                    duration = Toastic.LENGTH_LONG,
+//                                    type = Toastic.ERROR,
+//                                    customIcon = R.mipmap.lpg_icon,
+//                                    textColor = Color.RED,
+//                                    isIconAnimated = true
+//                                ).show() // Custom Toast message
+//
+//                                // Call SMS API to send Alert SMS
+////                                sendSMS("+91 89399 28002", object : Callback {
+////                                    override fun onFailure(call: Call, e: IOException) {
+////                                        // Handle network error
+////                                        e.printStackTrace()
+////                                    }
+////
+////                                    override fun onResponse(call: Call, response: Response) {
+////                                        val responseData = response.body?.string()
+////                                        // Handle the response data here
+////                                        System.out.println("SMS Response: " + responseData)
+////                                    }
+////                                })
+//
+//                                SMS_SENT_INDICATOR = true // Marking SMS sent as true
+//                            }
+//
+//                            // To make mobile Vibrate
+//                            val vibratorService =
+//                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+//                            vibratorService.vibrate(1000)
+//
+////                            // To play Sound Effect
+////                           mediaPlayer = MediaPlayer.create(this@MainActivity, R.raw.gas_leak_detected)
+////                            if (mediaPlayer.isPlaying){ // Pause player if sound is already playing
+////                                mediaPlayer.pause()
+////                                mediaPlayer.seekTo(0)
+////                            }
+////                            mediaPlayer.start() // Start sound effect
+//                        }
+                    }
 
-                            window.statusBarColor = Color.BLACK // Changing StatusBar color to BLACK
-                            parentLayout.setBackgroundColor(Color.WHITE) // Setting background of layout to WHITE
+                    mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumberGlobal} ppm") // Displaying MQ-2 sensor value in TextView
 
-                            gasStatusTextView.setText("Gas is Turned OFF") // When DB value is 0
-                            gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
-                            mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
+                    // Performing required Checks
+                    if (mq2SensorValueNumberGlobal != null && mq2SensorValueNumberGlobal.toInt() <= 0) { // When DB value is 0
 
-                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/a144eb42-7410-41ec-a912-18e7fddd2088/84OwkSBfoV.json") // Gas OFF URL
-                            lottieFileViewLottie.playAnimation() // Enable Animation
-                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
+                        window.statusBarColor = Color.BLACK // Changing StatusBar color to BLACK
+                        parentLayout.setBackgroundColor(Color.WHITE) // Setting background of layout to WHITE
 
-                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() < THRESHOLD_VALUE) { // When DB value is below Threshold
+                        gasStatusTextView.setText("Gas is Turned OFF") // When DB value is 0
+                        gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
+                        mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to Black
 
-                            window.statusBarColor =
-                                Color.parseColor("#8AFF8A") // Changing StatusBar color to GREEN
-                            parentLayout.setBackgroundColor(Color.parseColor("#8AFF8A")) // Setting background of layout to GREEN
+                        lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/a144eb42-7410-41ec-a912-18e7fddd2088/84OwkSBfoV.json") // Gas OFF URL
+                        lottieFileViewLottie.playAnimation() // Enable Animation
+                        lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
 
-                            gasStatusTextView.setText("No Gas leak Detected") // When DB value is less than Threshold
-                            gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
-                            mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
+                    } else if (mq2SensorValueNumberGlobal != null && mq2SensorValueNumberGlobal.toInt() < THRESHOLD_VALUE) { // When DB value is below Threshold
 
-                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/59563e3d-b43d-4587-832b-4335dd1d53c1/Rq9pSPSDgc.json") // No Gas Leaking URL
-                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/0ab8fdc9-b232-474f-8f41-60b9f81261bb/h3JeeqXmui.json") // No Gas Leaking URL
-                            lottieFileViewLottie.playAnimation() // Enable Animation
-                            lottieFileViewLottie.setSpeed(2.6f) // Set Animation Speed
+                        window.statusBarColor =
+                            Color.parseColor("#8AFF8A") // Changing StatusBar color to GREEN
+                        parentLayout.setBackgroundColor(Color.parseColor("#8AFF8A")) // Setting background of layout to GREEN
 
-                        } else if (mq2SensorValueNumber != null && mq2SensorValueNumber.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
+                        gasStatusTextView.setText("No Gas leak Detected") // When DB value is less than Threshold
+                        gasStatusTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
+                        mq2valueTextView.setTextColor(Color.parseColor("#000000")) // Changing TextView color to white
 
-                            window.statusBarColor =
-                                Color.parseColor("#F4E869") // Changing StatusBar color to RED
-                            parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
+                        // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/59563e3d-b43d-4587-832b-4335dd1d53c1/Rq9pSPSDgc.json") // No Gas Leaking URL
+                        lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/0ab8fdc9-b232-474f-8f41-60b9f81261bb/h3JeeqXmui.json") // No Gas Leaking URL
+                        lottieFileViewLottie.playAnimation() // Enable Animation
+                        lottieFileViewLottie.setSpeed(2.6f) // Set Animation Speed
 
-                            gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
-                            gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
-                            mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
+                    } else if (mq2SensorValueNumberGlobal != null && mq2SensorValueNumberGlobal.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
 
-                            // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
-                            lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3ba3d2c8-07fa-4b77-a493-236647192351/RdVih9L78P.json") // Gas Leaking URL
-                            lottieFileViewLottie.playAnimation() // Enable Animation
-                            lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
+                        window.statusBarColor =
+                            Color.parseColor("#F4E869") // Changing StatusBar color to RED
+                        parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
 
-                            if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
+                        gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
+                        gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
+                        mq2valueTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
 
-                                Toastic.toastic(
-                                    context = this@MainActivity,
-                                    message = "WARNING! Gas Leak Detected",
-                                    duration = Toastic.LENGTH_LONG,
-                                    type = Toastic.ERROR,
-                                    customIcon = R.mipmap.lpg_icon,
-                                    textColor = Color.RED,
-                                    isIconAnimated = true
-                                ).show() // Custom Toast message
+                        // lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/1fbb8d30-4ae9-4c0d-a5f0-fb52151bdd3d/U0EtFSweRl.json") // Gas Leaking URL
+                        lottieFileViewLottie.setAnimationFromUrl("https://lottie.host/3ba3d2c8-07fa-4b77-a493-236647192351/RdVih9L78P.json") // Gas Leaking URL
+                        lottieFileViewLottie.playAnimation() // Enable Animation
+                        lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
 
-                                // Call SMS API to send Alert SMS
+                        if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
+
+                            Toastic.toastic(
+                                context = this@MainActivity,
+                                message = "WARNING! Gas Leak Detected",
+                                duration = Toastic.LENGTH_LONG,
+                                type = Toastic.ERROR,
+                                customIcon = R.mipmap.lpg_icon,
+                                textColor = Color.RED,
+                                isIconAnimated = true
+                            ).show() // Custom Toast message
+
+                            // Call SMS API to send Alert SMS
 //                                sendSMS("+91 89399 28002", object : Callback {
 //                                    override fun onFailure(call: Call, e: IOException) {
 //                                        // Handle network error
@@ -190,22 +285,21 @@ class MainActivity : AppCompatActivity() {
 //                                    }
 //                                })
 
-                                SMS_SENT_INDICATOR = true // Marking SMS sent as true
-                            }
-
-                            // To make mobile Vibrate
-                            val vibratorService =
-                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                            vibratorService.vibrate(1000)
-
-//                            // To play Sound Effect
-//                           mediaPlayer = MediaPlayer.create(this@MainActivity, R.raw.gas_leak_detected)
-//                            if (mediaPlayer.isPlaying){ // Pause player if sound is already playing
-//                                mediaPlayer.pause()
-//                                mediaPlayer.seekTo(0)
-//                            }
-//                            mediaPlayer.start() // Start sound effect
+                            SMS_SENT_INDICATOR = true // Marking SMS sent as true
                         }
+
+                        // To make mobile Vibrate
+                        val vibratorService =
+                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                        vibratorService.vibrate(1000)
+
+                        // To play Sound Effect
+                        mediaPlayer = MediaPlayer.create(this@MainActivity, R.raw.gas_leak_detected)
+                        if (mediaPlayer.isPlaying) { // Pause player if sound is already playing
+                            mediaPlayer.pause()
+                            mediaPlayer.seekTo(0)
+                        }
+                        mediaPlayer.start() // Start sound effect
                     }
                 }
             }
@@ -229,7 +323,7 @@ class MainActivity : AppCompatActivity() {
             .post(RequestBody.create(null, ByteArray(0))) // Empty request body
             .build()
 
-        client.newCall(request).enqueue(callback)
+        client.newCall(request).enqueue(callback) // Making a new request
     }
 
 }
