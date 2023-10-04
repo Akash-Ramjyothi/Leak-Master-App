@@ -34,13 +34,16 @@ import okhttp3.Call
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.OkHttpClient
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var dbRef: DatabaseReference // Creating reference for Database
     val TAG = "DEBUG TAG" // TAG for Log debugging
     private lateinit var gasSensorValuesList: ArrayList<GasSensorValuesModel> // Array list to store fetched data
-    private val THRESHOLD_VALUE = 5 // Threshold value to send Alarm
+    private val THRESHOLD_VALUE = 7 // Threshold value to send Alarm
     private var SMS_SENT_INDICATOR =
         false // To indentify if the SMS is sent in a single event or not
     private lateinit var mediaPlayer: MediaPlayer // Creating object for MediaPlayer to play MP3 sound
@@ -191,6 +194,8 @@ class MainActivity : AppCompatActivity() {
 
                             sendAlertNotification() // Send PUSH Notification
 
+                            sendAlertEmail("Akash R", "ar6781@srmist.edu.in") // Send Alert Email
+
                             Toastic.toastic(
                                 context = this@MainActivity,
                                 message = "WARNING! Gas Leak Detected",
@@ -202,18 +207,18 @@ class MainActivity : AppCompatActivity() {
                             ).show() // Custom Toast message
 
                             // Call SMS API to send Alert SMS
-//                                sendSMS("+91 89399 28002", object : Callback {
-//                                    override fun onFailure(call: Call, e: IOException) {
-//                                        // Handle network error
-//                                        e.printStackTrace()
-//                                    }
-//
-//                                    override fun onResponse(call: Call, response: Response) {
-//                                        val responseData = response.body?.string()
-//                                        // Handle the response data here
-//                                        System.out.println("SMS Response: " + responseData)
-//                                    }
-//                                })
+                            sendSMS("+91 89399 28002", object : Callback {
+                                override fun onFailure(call: Call, e: IOException) {
+                                    // Handle network error
+                                    e.printStackTrace()
+                                }
+
+                                override fun onResponse(call: Call, response: Response) {
+                                    val responseData = response.body?.string()
+                                    // Handle the response data here
+                                    System.out.println("SMS Response: " + responseData)
+                                }
+                            })
 
                             SMS_SENT_INDICATOR = true // Marking SMS sent as true
                         }
@@ -290,7 +295,7 @@ class MainActivity : AppCompatActivity() {
 
     // Function to Send WARNING Notification
     private fun sendAlertNotification() {
-
+        // Check if Android OS is above Oreo or not
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "channelId",
@@ -304,14 +309,18 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        var builder = NotificationCompat.Builder(this, "channelId")
+        var builder =
+            NotificationCompat.Builder(this, "channelId") // Set Channel ID for notification
+
+        // Set Notification properties
         builder.setSmallIcon(R.mipmap.lpg_icon)
             .setContentTitle("Leak Master Alert")
             .setContentText("WARNING! Gas Leak Detected")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-        // .setColor(Color.parseColor("#FF0000"))
 
         with(NotificationManagerCompat.from(this)) {
+
+            // Check for required Permission
             if (ActivityCompat.checkSelfPermission(
                     applicationContext,
                     Manifest.permission.POST_NOTIFICATIONS
@@ -326,8 +335,48 @@ class MainActivity : AppCompatActivity() {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
-            notify(1, builder.build())
+            notify(1, builder.build()) // Build the Notification
         }
+    }
+
+    // Function to send email Alert to user
+    private fun sendAlertEmail(recipientName: String, recipientEmail: String) {
+        val url = "https://leak-master-email-api.onrender.com/send-email"
+
+        // Create a JSON object with the provided parameters
+        val json = """
+        {
+            "recipientName": "$recipientName",
+            "recipientEmail": "$recipientEmail"
+        }
+    """.trimIndent()
+
+        // Set the JSON media type using the extension function
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
+
+        // Create an OkHttpClient instance
+        val client = OkHttpClient()
+
+        // Create a request body with JSON content
+        val body = RequestBody.create(mediaType, json)
+
+        // Create the POST request
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        // Execute the request
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val responseBody = response.body?.string()
+                // Handle the response here
+            }
+
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                // Handle network failures here
+            }
+        })
     }
 
 }
