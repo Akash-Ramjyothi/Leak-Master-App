@@ -22,6 +22,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.yagmurerdogan.toasticlib.Toastic
 import okhttp3.*
+import okio.IOException
+import okhttp3.Call
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.OkHttpClient
 
 class MainActivity : AppCompatActivity() {
 
@@ -128,6 +133,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     mq2valueTextView.setText("Gas Sensor value: ${mq2SensorValueNumberGlobal} ppm") // Displaying MQ-2 sensor value in TextView
+
+                    uploadDataToThingSpeak(mq2SensorValueNumberGlobal) // Call function to upload data to ThingSpeak
 
                     // Performing required Checks
                     if (mq2SensorValueNumberGlobal != null && mq2SensorValueNumberGlobal.toInt() <= 0) { // When DB value is 0
@@ -238,6 +245,35 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         client.newCall(request).enqueue(callback) // Making a new request
+    }
+
+    // Function to upload "mq2SensorValueNumberGlobal" to ThingSpeak
+    private fun uploadDataToThingSpeak(mq2SensorValue: Number) {
+        val apiKey = "PQ00WI8L60NRB5AQ"
+        val url = "https://api.thingspeak.com/update?api_key=$apiKey&field1=$mq2SensorValue"
+
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    // Handle a successful response here if needed
+                    val responseBody = response.body?.string()
+                    // responseBody contains the response from the server
+                } else {
+                    // Handle an unsuccessful response here
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle network failures here
+            }
+        })
     }
 
 }

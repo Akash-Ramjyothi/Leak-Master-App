@@ -58,4 +58,6 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.1.0") // Lottie Files dependency
     implementation("com.github.AtifSayings:Animatoo:1.0.1") // Animatoo library
     implementation("com.github.yagmurerdogan:Toastic:1.0.1") // Custom Toast library
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Retrofit2 library
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Retrofit2 to GSON Converter library
 }
