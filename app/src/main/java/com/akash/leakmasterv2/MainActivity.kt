@@ -1,8 +1,13 @@
 package com.akash.leakmasterv2
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
 import android.provider.MediaStore.Audio.Media
@@ -13,6 +18,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.database.DataSnapshot
@@ -168,8 +175,8 @@ class MainActivity : AppCompatActivity() {
                     } else if (mq2SensorValueNumberGlobal != null && mq2SensorValueNumberGlobal.toInt() >= THRESHOLD_VALUE) { // Send Alert SMS when MQ-2 Sensor value is above threshold eg: >= 5
 
                         window.statusBarColor =
-                            Color.parseColor("#F4E869") // Changing StatusBar color to RED
-                        parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to RED
+                            Color.parseColor("#FF0000") // Changing StatusBar color to RED
+                        parentLayout.setBackgroundColor(Color.parseColor("#F4E869")) // Setting background of layout to Yellow
 
                         gasStatusTextView.setText("Gas Leak Detected!!!") // When DB value is greater than Threshold
                         gasStatusTextView.setTextColor(Color.parseColor("#FF0000")) // Changing TextView color to Red
@@ -181,6 +188,8 @@ class MainActivity : AppCompatActivity() {
                         lottieFileViewLottie.setSpeed(1.0f) // Set Animation Speed
 
                         if (SMS_SENT_INDICATOR == false) { // If SMS is not already sent
+
+                            sendAlertNotification() // Send PUSH Notification
 
                             Toastic.toastic(
                                 context = this@MainActivity,
@@ -235,7 +244,7 @@ class MainActivity : AppCompatActivity() {
     // Function to initiate SMS with API
     private fun sendSMS(phoneNumber: String, callback: Callback) {
 
-        val smsApiUrl = "https://sms-api-71h0.onrender.com/api/${phoneNumber}"
+        val smsApiUrl = "https://sms-api-71h0.onrender.com/api/${phoneNumber}" // SMS API URL
 
         val client = OkHttpClient() // Create object to use OkHttp
 
@@ -249,16 +258,19 @@ class MainActivity : AppCompatActivity() {
 
     // Function to upload "mq2SensorValueNumberGlobal" to ThingSpeak
     private fun uploadDataToThingSpeak(mq2SensorValue: Number) {
-        val apiKey = "PQ00WI8L60NRB5AQ"
-        val url = "https://api.thingspeak.com/update?api_key=$apiKey&field1=$mq2SensorValue"
+        val apiKey = "PQ00WI8L60NRB5AQ" // API Key for ThingSpeak
+        val url =
+            "https://api.thingspeak.com/update?api_key=$apiKey&field1=$mq2SensorValue" // GET Request URL to upload data
 
-        val client = OkHttpClient()
+        val client = OkHttpClient() // Object for OkHTTP
 
+        // Making Requesr body
         val request = Request.Builder()
             .url(url)
             .get()
             .build()
 
+        // Performing new Request
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
@@ -274,6 +286,48 @@ class MainActivity : AppCompatActivity() {
                 // Handle network failures here
             }
         })
+    }
+
+    // Function to Send WARNING Notification
+    private fun sendAlertNotification() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "channelId",
+                "Leak Master Alert",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description = "WARNING! Gas Leak Detected"
+
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        var builder = NotificationCompat.Builder(this, "channelId")
+        builder.setSmallIcon(R.mipmap.lpg_icon)
+            .setContentTitle("Leak Master Alert")
+            .setContentText("WARNING! Gas Leak Detected")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        // .setColor(Color.parseColor("#FF0000"))
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            notify(1, builder.build())
+        }
     }
 
 }
