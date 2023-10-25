@@ -15,8 +15,10 @@ Developed a Mobile Application, that continuously monitors the amount of Gas Lea
 
 ## 🧠 Working of Project:
 <p align="center">
-<img src="https://github.com/Akash-Ramjyothi/Leak-Master-App/assets/54114888/ef651f37-0ca5-45e5-8c11-91b4ac5c727c" width="800">
+<img src="https://github.com/Akash-Ramjyothi/Leak-Master-App/assets/54114888/a938894c-15cc-43e7-966c-858154b1e66e" width="800">
 </p>
+
+
 
 ## 🏗 Built With:
 - Model-View architecture
