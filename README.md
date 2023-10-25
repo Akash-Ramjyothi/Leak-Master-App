@@ -15,7 +15,7 @@ Developed a Mobile Application, that continuously monitors the amount of Gas Lea
 
 ## 🧠 Working of Project:
 <p align="center">
-<img src="https://github.com/Akash-Ramjyothi/Leak-Master-App/assets/54114888/03c31921-361c-4489-9e26-fd9de61fec74" width="800">
+<img src="https://ipfs.io/ipfs/bafkreidvq7eiqjcaac6kjodgvnmf5hzb65e3jbehqqluzasmio72qilwv4" width="800">
 </p>
 
 ## 🏗 Built With:
@@ -32,8 +32,16 @@ Developed a Mobile Application, that continuously monitors the amount of Gas Lea
 - Wait for Gradle Build to complete.
 - Select whether to run on Android Emulator or Physical Device connected with USB.
 
-## 💥 How to Contribute?
+### 🌎 Twilio SMS API:
+  ```https://github.com/Akash-Ramjyothi/SMS-API```
 
+### 🌎 Alert Email API:
+```https://github.com/Akash-Ramjyothi/Leak-Master-Email-API```
+
+### 🌎 ThingSpeak API:
+```https://api.thingspeak.com/update?api_key=$apiKey&field1=$mq2SensorValue```
+
+## 💥 How to Contribute?
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) 
 
@@ -54,3 +62,9 @@ Developed a Mobile Application, that continuously monitors the amount of Gas Lea
   <a href="https://www.instagram.com/akash.ramjyothi/"><img src="https://img.shields.io/badge/instagram-%23D14836.svg?&style=for-the-badge&logo=instagram&logoColor=pink" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
   ☎️ PH:+91 8939928002.
 </p>
+
+## 🌐 References Used:
+- https://www.youtube.com/watch?v=EMM_3Wld2jU
+- https://www.youtube.com/watch?v=GZnCHLEo6ng
+- https://www.youtube.com/watch?v=u2nMxGuYJPU
+- https://www.youtube.com/watch?v=7YPbd6gRPyk
