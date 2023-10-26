@@ -5,7 +5,7 @@
 </p>
 
 ## 📜 Description:
-Developed a Mobile Application, that continuously monitors the amount of Gas Leak in an appliance, whose values are fetched from an MQ-2 Gas Sensor (IoT Sensor). It can detect when the Gas is OFF, when there is "No Gas Leak", or when the "Gas Leak is Detected". When the Gas Leak is detected, it initiates an Alert SMS and Alert Email notification with external APIs. The values are interfaced on a real-time basis.
+Developed a mobile application, integrated with an MQ-2 Gas Sensor, ensures rapid gas status detection in just 5 seconds for "Gas OFF," immediate response within 15 seconds for "No Gas Leak," and alert notifications dispatched within 30 seconds when a "Gas Leak is Detected." In the case of a gas leak, it initiates Alert SMS and Email notifications in under 1 minute. Additionally, the application provides real-time monitoring, offering data updates at seconds intervals, enabling users to take swift, data-driven action to ensure safety and appliance security.
 
 ## 📽 Sample Demo:
 
