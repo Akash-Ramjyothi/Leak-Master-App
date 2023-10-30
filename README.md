@@ -8,7 +8,7 @@
 Developed a mobile application, integrated with an MQ-2 Gas Sensor, ensures rapid gas status detection in just 5 seconds for "Gas OFF," immediate response within 15 seconds for "No Gas Leak," and alert notifications dispatched within 30 seconds when a "Gas Leak is Detected." In the case of a gas leak, it initiates Alert SMS and Email notifications in under 1 minute. Additionally, the application provides real-time monitoring, offering data updates at seconds intervals, enabling users to take swift, data-driven action to ensure safety and appliance security.
 
 ## 📽 Sample Demo:
-
+https://github.com/Akash-Ramjyothi/Leak-Master-App/assets/54114888/534aeee5-0677-47b4-9d00-332ce436b56d
 
 ## 📱 Download APK:
 ```https://github.com/Akash-Ramjyothi/Leak-Master-App/raw/master/APK/Leak-Master.apk```
@@ -17,8 +17,6 @@ Developed a mobile application, integrated with an MQ-2 Gas Sensor, ensures rapi
 <p align="center">
 <img src="https://github.com/Akash-Ramjyothi/Leak-Master-App/assets/54114888/a938894c-15cc-43e7-966c-858154b1e66e" width="800">
 </p>
-
-
 
 ## 🏗 Built With:
 - Model-View architecture
